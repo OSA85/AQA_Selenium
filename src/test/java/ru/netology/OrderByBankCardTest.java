@@ -53,6 +53,84 @@ public class OrderByBankCardTest {
         assertEquals(expectedText, actualText);
     }
 
+    @Test
+    public void shouldSendFormAllFieldsEmpty (){ //задача 2 все поля пустые
+        driver.get("http://localhost:9999");
+
+        driver.findElement(By.tagName("button")).click(); //отправить
+        List<WebElement> textFieldsInputSub = driver.findElements(By.className("input__sub"));
+        String expectedText = "Поле обязательно для заполнения";
+        String actual = textFieldsInputSub.get(0).getText();
+        assertEquals(expectedText, actual);
+    }
+
+    @Test
+    public void shouldSendFormWithoutName (){ //задача 2 поле без имени
+        driver.get("http://localhost:9999");
+        List<WebElement> textFields = driver.findElements(By.className("input__control")); //поиск всех полей с именем таким класса
+        textFields.get(1).sendKeys("+77777777777");
+        driver.findElement(By.className("checkbox__box")).click();//согласие на обработку данных
+        driver.findElement(By.tagName("button")).click(); //отправить
+        List<WebElement> textFieldsInputSub = driver.findElements(By.className("input__sub"));
+        String expectedText = "Поле обязательно для заполнения";
+        String actual = textFieldsInputSub.get(0).getText();
+        assertEquals(expectedText, actual);
+    }
+
+    @Test
+    public void shouldSendFormNameOnEnglish (){ //задача 2 поле имя на английском
+        driver.get("http://localhost:9999");
+        List<WebElement> textFields = driver.findElements(By.className("input__control")); //поиск всех полей с именем таким класса
+        textFields.get(0).sendKeys("Sherlock Holmes");
+        textFields.get(1).sendKeys("+77777777777");
+        driver.findElement(By.className("checkbox__box")).click();//согласие на обработку данных
+        driver.findElement(By.tagName("button")).click(); //отправить
+        List<WebElement> textFieldsInputSub = driver.findElements(By.className("input__sub"));
+        String expectedText = "Имя и Фамилия указаные неверно. Допустимы только русские буквы, пробелы и дефисы.";
+        String actual = textFieldsInputSub.get(0).getText();
+        assertEquals(expectedText, actual);
+    }
+
+    @Test
+    public void shouldSendFormWithoutPhone (){ //задача 2 поле без телефона
+        driver.get("http://localhost:9999");
+        List<WebElement> textFields = driver.findElements(By.className("input__control")); //поиск всех полей с именем таким класса
+        textFields.get(0).sendKeys("Малыш Барбоскин");
+        driver.findElement(By.className("checkbox__box")).click();//согласие на обработку данных
+        driver.findElement(By.tagName("button")).click(); //отправить
+        List<WebElement> textFieldsInputSub = driver.findElements(By.className("input__sub"));
+        String expectedText = "Поле обязательно для заполнения";
+        String actual = textFieldsInputSub.get(1).getText();
+        assertEquals(expectedText, actual);
+    }
+
+    @Test
+    public void shouldSendFormWrongNumber (){ //задача 2 поле телефона неправильный номер
+        driver.get("http://localhost:9999");
+        List<WebElement> textFields = driver.findElements(By.className("input__control")); //поиск всех полей с именем таким класса
+        textFields.get(0).sendKeys("Малыш Барбоскин");
+        textFields.get(1).sendKeys("+777777777");
+        driver.findElement(By.className("checkbox__box")).click();//согласие на обработку данных
+        driver.findElement(By.tagName("button")).click(); //отправить
+        List<WebElement> textFieldsInputSub = driver.findElements(By.className("input__sub"));
+        String expectedText = "Телефон указан неверно. Должно быть 11 цифр, например, +79012345678.";
+        String actual = textFieldsInputSub.get(1).getText();
+        assertEquals(expectedText, actual);
+    }
+
+    @Test
+    public void shouldSendFormWithoutCheckbox (){   //задача 2 без подтверждения обработки данных
+        driver.get("http://localhost:9999");
+        List<WebElement> textFields = driver.findElements(By.className("input__control")); //поиск всех полей с именем таким класса
+        textFields.get(0).sendKeys("Малыш Барбоскин");
+        textFields.get(1).sendKeys("+77777777777");
+        driver.findElement(By.tagName("button")).click(); //отправить
+        String expectedText = "Я соглашаюсь с условиями обработки и использования" +
+                " моих персональных данных и разрешаю сделать запрос в бюро кредитных историй";
+        String actualText = driver.findElement(By.cssSelector("[data-test-id='agreement']")).getText().trim();
+        assertEquals(expectedText, actualText);
+    }
+
 
 
 }
