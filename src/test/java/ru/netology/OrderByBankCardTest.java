@@ -23,7 +23,6 @@ public class OrderByBankCardTest {
     @BeforeAll
     public static void setUpAll(){
         WebDriverManager.chromedriver().setup();
-//        System.setProperty("webdriver.chrome.driver","./driver/win/chromedriver.exe");
     }
 
     @BeforeEach
